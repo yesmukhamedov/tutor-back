@@ -14,11 +14,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    parrent: {
+    parent: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
-    avatarUrl: String
+    avatarUrl: String,
+    theme: String
 }, {
     timestamps: true,
 });

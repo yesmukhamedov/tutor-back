@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+import cors from "cors";
 
 import * as UserController from "./controllers/UserController.js";
-import * as LessonController from "./controllers/LessonController.js";
 import * as TestController from "./controllers/TestController.js";
 
 import checkAuth from "./utils/checkAuth.js";
@@ -29,6 +29,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
+app.use(cors());
 app.use(express.json());
 app.use('/uploads', checkAuth, express.static('uploads'));
 
@@ -36,21 +37,22 @@ app.get('/', (req, res) => {
     res.send('Salem Alem!');
 });
 
-app.post('/auth/login', validation.login, handleValidationErrors, UserController.login);
-app.post('/auth/register', validation.register, handleValidationErrors, UserController.register);
+app.post('/login', validation.login, handleValidationErrors, UserController.login);
+app.post('/register', validation.register, handleValidationErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.getMe);
 
-app.get('/lessons', checkAuth, LessonController.getAll);
-app.get('/lesson/:id', checkAuth, LessonController.getOne);
-app.post('/lesson', checkAuth, checkPermission, validation.lessonForm, handleValidationErrors, LessonController.create);
-app.delete('/lesson/:id', checkAuth, checkPermission, LessonController.remove);
-app.patch('/lesson/:id', checkAuth, checkPermission, validation.lessonForm, handleValidationErrors, LessonController.update);
+// app.get('/lessons', checkAuth, LessonController.getAll);
+// app.get('/lesson/:key', checkAuth, LessonController.getOne);
+// app.post('/lesson', checkAuth, checkPermission, validation.lessonForm, handleValidationErrors, LessonController.create);
+// app.delete('/lesson/:id', checkAuth, checkPermission, LessonController.remove);
+// app.patch('/lesson/:id', checkAuth, checkPermission, validation.lessonForm, handleValidationErrors, LessonController.update);
 
-app.get('/tests/:key/:count', checkAuth, TestController.getQuiz);
-app.get('/test/:id', checkAuth, TestController.getOne);
-app.post('/test', checkAuth, checkPermission, TestController.create);
-app.delete('/test/:id', checkAuth, checkPermission, TestController.remove);
-app.patch('/test/:id', checkAuth, checkPermission, TestController.update);
+app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz); //for student
+app.get('/collection/:collectionName', checkAuth, TestController.getCollection); //for teacher on admin panel
+
+app.post('/test', checkAuth, TestController.add);
+app.patch('/test/:id', checkAuth, TestController.update);
+app.delete('/test/:id', checkAuth, TestController.remove);
 
 app.post('/upload', checkAuth, upload.single('recfile'), (req, res) => {
     res.json({url: `/uploads/${req.file.originalname}`})

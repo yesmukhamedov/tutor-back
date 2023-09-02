@@ -9,9 +9,9 @@ export default (req, res, next) => {
             req.userId = decoded._id;
             next();
         } catch (err) {
-            return res.status(403).json({message: 'Рұқсат жоқ!'});
+            return res.status(403).json({status: 'error', message: 'Рұқсат жоқ!'});
         }
     } else {
-        return res.status(403).json({message: 'Рұқсат жоқ!'});
+        return res.status(403).json({status: 'error', message: 'Рұқсат жоқ!'});
     }
 }

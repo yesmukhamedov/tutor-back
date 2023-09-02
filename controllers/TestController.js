@@ -1,99 +1,61 @@
-import UserModel from "../models/User.js";
-import QuestionModel from "../models/Question.js";
-import OptionModel from "../models/Option.js";
+import TestModel from "../models/Test.js";
 
 export const getQuiz = async (req, res) => {
     try {
-        // const tests = await TestModel.find().where('key').equals(req.params.id).populate('option').exec();
-
-        res.json(await QuestionModel.aggregate([
-            { $match: { key: req.params.key } },
-            { $sample: { size: Math.min(parseInt(req.params.count), await QuestionModel.countDocuments({ key: req.params.key }))}},
-            { $lookup: { from: 'options', localField: 'options', foreignField: '_id', as: 'options' } },
+        res.json(await TestModel.aggregate([
+            { $match: {collectionName: req.params.collectionName}},
+            { $sample: {size: Math.min(parseInt(req.params.count), await TestModel.countDocuments({collectionName: req.params.collectionName}))}},
+            { $project: { 
+                _id: 1, 
+                text: 1, 
+                options: {
+                    _id: 1,
+                    text: 1
+                }
+            } }
         ]));
     } catch (err) {
         console.log(err);
-        res.status(500).json({message: 'Тесттерді жүктеу кезіндегі қате'});
-    }
-
-    // try {
-    //     const questions = await Question.find().populate('options');
-    //     res.json(questions);
-    // } catch (err) {
-    //     res.status(500).json({message: 'Тесттерді жүктеу кезіндегі қате'});
-    // }
-};
-
-export const create = async (req, res) => {
-    try {
-        // if(await UserModel.findById(req.userId).parrent)
-        //     return res.status(403).json({message: 'Рұқсат жоқ!'});
-
-        await QuestionModel.create({
-            text: req.body.text,
-            key: req.body.key,
-            options: await OptionModel.create(options).map(option => option._id),
-        });
-
-        res.json({success: true});
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({message: 'Тесттерді сақтау кезіндегі қате'});
+        res.status(500).json({status: 'error', message: 'Тесттерді жүктеу кезіндегі қате'});
     }
 };
 
-export const getOne = async (req, res) => {
+export const getCollection = async (req, res) => {
     try {
-        const question = await QuestionModel.findById(req.params.id).populate('options');
-        if (!question) {
-            return res.status(404).json({ message: 'Тест табылмады' });
-        }
-        res.json(question);
+        res.json(await TestModel.find({ collectionName: req.params.collectionName }));
     } catch (err) {
         console.log(err);
-        res.status(500).json({message: 'Тестті жүктеу кезіндегі қате'});
+        res.status(500).json({status: 'error', message: 'Тесттерді жүктеу кезіндегі қате'});
     }
 };
 
-
-
-export const remove = async (req, res) => {
+export const add = async (req, res) => {
     try {
-        const deletedQuestion = await Question.findByIdAndDelete(req.params.id);
-
-        if (!deletedQuestion) {
-            return res.status(404).json({ message: 'Тест табылмады' });
-        }
-        await Option.deleteMany({ _id: { $in: deletedQuestion.options } });
-
-        res.json({success: true});
+        res.json(await TestModel.create(req.body));
     } catch (err) {
         console.log(err);
-        res.status(500).json({message: 'Өшіру орындалмады'});
+        res.status(500).json({status: 'error', message: 'Тесттерді сақтау кезіндегі қате'});
     }
 };
 
 export const update = async (req, res) => {
     try {
-        const { text, key, options } = req.body;
+        if (!await Test.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+            return res.status(404).json({status: 'error', message: 'Тест табылмады' });
+        res.json({status: 'success', message: 'Тест сәтті өңделді'});
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({status: 'error', message: 'Тестті өңдеу кезіндегі қате'});
+    }
+}
 
-        const updatedOptions = await OptionModel.create(options);
-        const updatedQuestion = await QuestionModel.findByIdAndUpdate(
-            req.params.id,
-            {
-                text,
-                key,
-                options: updatedOptions.map(option => option._id),
-            },
-            { new: true }
-        ).populate('options');
-
-        if (!updatedQuestion) {
-            return res.status(404).json({ message: 'Тест табылмады' });
-        }
+export const remove = async (req, res) => {
+    try {
+        if (!await OptionModel.findByIdAndDelete(req.params.id))
+            return res.status(404).json({status: 'error', message: 'Тест табылмады' });
         res.json({success: true});
     } catch (err) {
         console.log(err);
-        res.status(500).json({message: 'Тестті өңдеу кезіндегі қате'});
+        res.status(500).json({status: 'error', message: 'Өшіру орындалмады'});
     }
-}
+};
