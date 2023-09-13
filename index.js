@@ -31,7 +31,7 @@ const upload = multer({storage});
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', checkAuth, express.static('uploads'));
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
     res.send('Salem Alem!');
