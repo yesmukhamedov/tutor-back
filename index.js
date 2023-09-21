@@ -12,7 +12,7 @@ import handleValidationErrors from "./utils/handleValidationErrors.js";
 import checkPermission from "./utils/checkPermission.js";
 
 mongoose
-    .connect('mongodb+srv://yeskendyr:jZbwFsvcgvdL04ws@cluster0.m7tuepw.mongodb.net/tutor?retryWrites=true&w=majority')
+    .connect(process.env.MONGODB_URI)
     .then(()=>console.log('DB connection OK'))
     .catch(err=>console.log('error', err))
 
@@ -58,7 +58,7 @@ app.post('/upload', checkAuth, upload.single('recfile'), (req, res) => {
     res.json({status: {type: 'success', message: req.file.originalname, description: 'File сәтті сақталды'}, file: {url: `/uploads/${req.file.originalname}`}})
 });
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if(err) 
         return console.log(err);
 
