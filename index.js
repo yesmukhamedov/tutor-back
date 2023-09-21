@@ -55,8 +55,8 @@ app.patch('/test/:id', checkAuth, TestController.update);
 app.delete('/test/:id', checkAuth, TestController.remove);
 
 app.post('/upload', checkAuth, upload.single('recfile'), (req, res) => {
-    res.json({url: `/uploads/${req.file.originalname}`})
-})
+    res.json({status: {type: 'success', message: req.file.originalname, description: 'File сәтті сақталды'}, file: {url: `/uploads/${req.file.originalname}`}})
+});
 
 app.listen(4444, (err) => {
     if(err) 

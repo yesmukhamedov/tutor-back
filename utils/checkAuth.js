@@ -9,9 +9,9 @@ export default (req, res, next) => {
             req.userId = decoded._id;
             next();
         } catch (err) {
-            return res.status(403).json({status: 'error', message: 'Рұқсат жоқ!'});
+            return res.status(403).json({status: {type: 'error', message: 'Рұқсат жоқ!', description: 'Сіз ұсынған token ескірген, қайта кіріңіз'}});
         }
     } else {
-        return res.status(403).json({status: 'error', message: 'Рұқсат жоқ!'});
+        return res.status(403).json({status: {type: 'info', message: 'Қош келдіңіз!', description: 'Жүйемен толық танысу үшін қосылыңыз'}});
     }
 }

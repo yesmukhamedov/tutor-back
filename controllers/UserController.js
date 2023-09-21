@@ -14,7 +14,7 @@ export const register = async (req, res) => {
             try {
                 supervisorObjectId = new mongoose.Types.ObjectId(req.body.supervisorId);
             } catch (error) {
-                return res.status(400).json({ status: 'error', message: 'Мұғалім кодының қате форматы' });
+                return res.status(400).json({status: { type: 'error', message: 'Тіркелу орындалмады', description: 'Мұғалім кодының қате форматы'}});
             }
         }
       
@@ -22,7 +22,7 @@ export const register = async (req, res) => {
             const supervisor = await User.findOne({ _id: supervisorObjectId });
     
             if (!supervisor) {
-                return res.status(404).json({ status: 'error', message: 'Ұсынылған жетекші табылмады' });
+                return res.status(404).json({status: { type: 'error', message: 'Тіркелу орындалмады', description: 'Ұсынылған жетекші жүйеден табылмады'}});
             }
         }
 
@@ -36,10 +36,10 @@ export const register = async (req, res) => {
 
         await user.save();
 
-        res.json({message: 'success'});
+        res.json({status: {type: 'success', message: 'Қош келдіңіз!', description: 'Жүйеге тіркелу сәтті орындалды. Барлық мәліметтерді жеке парақшаңыздан тексере аласыз'}});
     } catch (err) {
         console.log(err)
-        res.status(500).json({status: 'error', message: 'Жүйеге тіркелу орындалмады'});
+        res.status(500).json({status: {type: 'error', message: 'Тіркелу орындалмады', description: 'Жүйеге тіркелу орындалмады'}});
     }
 };
 
@@ -51,12 +51,12 @@ export const login = async (req, res) => {
           });
 
         if(!user)
-            return res.status(404).json({status: 'error', message: 'Электронды почта немесе құпиясөз қате!'});
+            return res.status(404).json({status: {type: 'error', message: 'Жүйеге кіру орындалмады', description: 'Электронды почта немесе құпиясөз қате!'}});
 
         const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash);
         
         if(!isValidPass)
-            return res.status(404).json({status: 'error', message: 'Электронды почта немесе құпиясөз қате!'});
+            return res.status(404).json({status: {type: 'error', message: 'Жүйеге кіру орындалмады', description: 'Электронды почта немесе құпиясөз қате!'}});
 
         const token = jwt.sign(
             {_id: user._id,},
@@ -66,10 +66,10 @@ export const login = async (req, res) => {
 
         const { passwordHash, __v, createdAt, updatedAt, ...userData } = user._doc;
 
-        res.json({...userData, token});
+        res.json({status: {type: 'success', message: 'Қош келдіңіз!', description: 'Жүйеге кіру сәтті орындалды'}, user: {...userData, token}});
     } catch (err) {
         console.log(err)
-        res.status(500).json({status: 'error', message: 'Жүйеге кіру орындалмады'});
+        res.status(500).json({status: {type: 'error', message: 'Жүйеге кіру орындалмады', description: 'Жүйеге кіру кезіндегі ескерту'}});
     }
 };
 
@@ -81,13 +81,12 @@ export const getMe = async (req, res) => {
           });
 
         if(!user)
-            return res.status(404).json({status: 'error', message: 'Қолданушы табылмады'});
+            return res.status(404).json({status: {type: 'warning', message: 'Жүйеге тіркелмеген қолданушы', message: 'Қолданушы табылмады'}});
         
         const { passwordHash, __v, createdAt, updatedAt, ...userData } = user._doc;
 
-        res.json(userData);
+        res.json({status: {type: 'success', message: user.fullName, description: 'Жүйеге қайта оралуыңызбен'}, user: userData});
         } catch (err) {
-            console.log(err)
-            res.status(500).json({status: 'error', message: 'Рұқсат жоқ!'});
+            res.status(500).json({status: {type: 'error', message: 'Қате', description: 'Қолданушыны жүйеден іздеу кезіндегі ескерту'}});
         }
 };
