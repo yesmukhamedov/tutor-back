@@ -18,6 +18,10 @@ const MenuSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isEnable: {
+        type: Boolean,
+        default: fasle
+    },
     children: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Menu'

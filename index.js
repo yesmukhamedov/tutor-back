@@ -11,13 +11,19 @@ import checkAuth from "./utils/checkAuth.js";
 import * as validation from "./utils/validations.js";
 import handleValidationErrors from "./utils/handleValidationErrors.js";
 import checkPermission from "./utils/checkPermission.js";
+import { config } from 'dotenv';
+
+// require('dotenv').config();
+
+config();
 
 mongoose
-    .connect(process.env.MONGODB_URI)
+    .connect('mongodb+srv://yeskendyr:jZbwFsvcgvdL04ws@cluster0.m7tuepw.mongodb.net/tutor?retryWrites=true&w=majority')
     .then(()=>console.log('DB connection OK'))
     .catch(err=>console.log('error', err))
 
 const app = express();
+ app.use(cors())
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
@@ -32,7 +38,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-app.use(cors());
+
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -53,7 +59,7 @@ app.get('/auth/me', checkAuth, UserController.getMe);
 app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz); //for student
 app.get('/collection/:collectionName', checkAuth, TestController.getCollection); //for teacher on admin panel
 
-app.post('/test', checkAuth, TestController.add);
+app.post('/test', checkAuth, checkAuth, TestController.add);
 app.patch('/test/:id', checkAuth, TestController.update);
 app.delete('/test/:id', checkAuth, TestController.remove);
 
