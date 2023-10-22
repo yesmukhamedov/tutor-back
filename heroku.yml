@@ -10,4 +10,4 @@ build:
       - node_modules
 
 run:
-  web: node index.js
+  web: npm start
