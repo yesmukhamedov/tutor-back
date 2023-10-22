@@ -11,14 +11,14 @@ import checkAuth from "./utils/checkAuth.js";
 import * as validation from "./utils/validations.js";
 import handleValidationErrors from "./utils/handleValidationErrors.js";
 import checkPermission from "./utils/checkPermission.js";
-import { config } from 'dotenv';
+import {config} from 'dotenv';
 
 // require('dotenv').config();
 
 config();
 
 mongoose
-    .connect('mongodb+srv://yeskendyr:jZbwFsvcgvdL04ws@cluster0.m7tuepw.mongodb.net/tutor?retryWrites=true&w=majority')
+    .connect(process.env.MONGODB_URI)
     .then(()=>console.log('DB connection OK'))
     .catch(err=>console.log('error', err))
 
@@ -43,6 +43,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
+    console.log(req)
     res.send('Salem Alem!');
 });
 
