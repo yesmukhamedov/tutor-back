@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import mongoose from "mongoose";
 import User from "../models/User.js";
 
 export const register = async (req, res) => {
     try {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(req.body.password, salt);
+        const salt = await bcryptjs.genSalt(10);
+        const hash = await bcryptjs.hash(req.body.password, salt);
 
         let supervisorObjectId = null;
 
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
         if(!user)
             return res.status(404).json({status: {type: 'error', message: 'Жүйеге кіру орындалмады', description: 'Электронды почта немесе құпиясөз қате!'}});
 
-        const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash);
+        const isValidPass = await bcryptjs.compare(req.body.password, user._doc.passwordHash);
         
         if(!isValidPass)
             return res.status(404).json({status: {type: 'error', message: 'Жүйеге кіру орындалмады', description: 'Электронды почта немесе құпиясөз қате!'}});
