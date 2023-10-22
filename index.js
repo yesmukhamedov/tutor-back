@@ -42,7 +42,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
     console.log(req)
-    res.send('Salem Alem!');
+    res.send('Salem Alem!!!!!!');
 });
 
 app.post('/login', validation.login, handleValidationErrors, UserController.login);
