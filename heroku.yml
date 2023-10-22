@@ -3,11 +3,6 @@ build:
     web: Dockerfile
   config:
     NODE_ENV: production
-  paths:
-    - public/
-  cache:
-    directories:
-      - node_modules
 
 run:
   web: npm start
