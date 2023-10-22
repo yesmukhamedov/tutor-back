@@ -18,7 +18,7 @@ import {config} from 'dotenv';
 config();
 
 mongoose
-    .connect(process.env.MONGODB_URI)
+    .connect(process.env.MONGODB)
     .then(()=>console.log('DB connection OK'))
     .catch(err=>console.log('error', err))
 
