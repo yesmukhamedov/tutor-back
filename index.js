@@ -67,5 +67,5 @@ app.listen(process.env.PORT || 4444, (err) => {
     if(err) 
         return console.log(err);
 
-    console.log('server OK on ', 4444);
+    console.log('server OK on ', process.env.PORT || 4444);
 })
