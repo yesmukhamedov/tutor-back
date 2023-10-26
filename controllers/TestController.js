@@ -51,7 +51,7 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
     try {
-        if (!await OptionModel.findByIdAndDelete(req.params.id))
+        if (!await TestModel.findByIdAndDelete(req.params.id))
             return res.status(404).json({status: {type: 'error', message: 'Тест табылмады', description: 'Тест табылмады id: '+req.params.id}});
         res.json({success: true});
     } catch (err) {
