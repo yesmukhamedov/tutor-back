@@ -40,7 +40,7 @@ export const add = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        if (!await Test.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+        if (!await TestModel.findByIdAndUpdate(req.params.id, req.body, { new: true }))
             return res.status(404).json({status: {type: 'error', message: 'Тест табылмады', description: 'Тест табылмады id: '+req.params.id}});
         res.json({status: {type: 'success', message: 'Сәтті орындалды', description: 'Тест сәтті өңделді'}});
     } catch (err) {
