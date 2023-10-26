@@ -53,7 +53,7 @@ export const remove = async (req, res) => {
     try {
         if (!await TestModel.findByIdAndDelete(req.params.id))
             return res.status(404).json({status: {type: 'error', message: 'Тест табылмады', description: 'Тест табылмады id: '+req.params.id}});
-        res.json({success: true});
+        res.json({status: {type: 'success', message: 'Сәтті орындалды', description: 'Тест сәтті өшірілді'}});
     } catch (err) {
         console.log(err);
         res.status(500).json({status: {type: 'error', message: 'Өшіру орындалмады', description: 'Тестті өшіру кезіндегі қате'}});
