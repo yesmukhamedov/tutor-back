@@ -49,7 +49,8 @@ app.post('/login', validation.login, handleValidationErrors, UserController.logi
 app.post('/register', validation.register, handleValidationErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.getMe);
 
-app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz); //for student
+app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz); //for studentchecking
+app.get('/quiz/:collectionName/:checking', checkAuth, TestController.checking); //for student
 app.get('/collection/:collectionName', checkAuth, TestController.getCollection); //for teacher on admin panel
 
 app.post('/test', checkAuth, checkAuth, TestController.add);
