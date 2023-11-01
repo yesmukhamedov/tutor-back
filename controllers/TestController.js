@@ -9,6 +9,7 @@ export const getQuiz = async (req, res) => {
                 _id: 1, 
                 text: 1, 
                 options: {
+                    _id: 1, 
                     text: 1
                 }
             } }
