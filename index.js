@@ -50,7 +50,7 @@ app.post('/register', validation.register, handleValidationErrors, UserControlle
 app.get('/auth/me', checkAuth, UserController.getMe);
 
 app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz);
-app.get('/quiz/checking', checkAuth, TestController.checking);
+app.post('/quiz/checking', checkAuth, TestController.checking);
 app.get('/collection/:collectionName', checkAuth, TestController.getCollection);
 
 app.post('/test', checkAuth, checkAuth, TestController.add);
