@@ -67,6 +67,7 @@ export const checking = async (req, res) => {
 
       for (const questionData of questions) {
         const { _id, ans } = questionData;
+        const testResults = [];
         const question = TestModel.findOne({_id});
 
         if (!question) {
