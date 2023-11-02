@@ -30,15 +30,13 @@ export const getQuiz = async (req, res) => {
     );
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({
-        status: {
-          type: "error",
-          message: "Жүктеу орындалмады",
-          description: "Тесттерді жүктеу кезіндегі қате",
-        },
-      });
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Жүктеу орындалмады",
+        description: "Тесттерді жүктеу кезіндегі қате",
+      },
+    });
   }
 };
 
@@ -51,88 +49,86 @@ export const getCollection = async (req, res) => {
     );
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({
-        status: {
-          type: "error",
-          message: "Жүктеу орындалмады",
-          description: "Тесттерді жүктеу кезіндегі қате",
-        },
-      });
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Жүктеу орындалмады",
+        description: "Тесттерді жүктеу кезіндегі қате",
+      },
+    });
   }
 };
 
 export const checking = async (req, res) => {
   try {
-    const { collectionName, questions } = req.body;
+    // const { collectionName, questions } = req.body;
 
-    const tests = await TestModel.find({ collectionName });
+    // const tests = await TestModel.find({ collectionName });
 
-    if (tests.length === 0) {
-      return res.status(404).json({
-        status: {
-          type: "error",
-          message: "Қате",
-          description: "Ұсынылған жауаптардағы тест _id қате",
-        },
-      });
-    }
+    // if (tests.length === 0) {
+    //   return res.status(404).json({
+    //     status: {
+    //       type: "error",
+    //       message: "Қате",
+    //       description: "Ұсынылған жауаптардағы тест _id қате",
+    //     },
+    //   });
+    // }
 
-    const results = [];
+    // const results = [];
 
-    for (const test of tests) {
-      const testResults = [];
+    // for (const test of tests) {
+    //   const testResults = [];
 
-      for (const questionData of questions) {
-        const { _id, ans } = questionData;
-        const question = test.questions.find((q) => q._id.toString() === _id);
+    //   for (const questionData of questions) {
+    //     const { _id, ans } = questionData;
+    //     const question = test.questions.find((q) => q._id.toString() === _id);
 
-        if (!question) {
-          return res.status(400).json({
-            status: {
-              type: "error",
-              message: "Қате",
-              description: "Ұсынылған жауаптардағы сұрақ _id қате",
-            },
-          });
-        }
+    //     if (!question) {
+    //       return res.status(400).json({
+    //         status: {
+    //           type: "error",
+    //           message: "Қате",
+    //           description: "Ұсынылған жауаптардағы сұрақ _id қате",
+    //         },
+    //       });
+    //     }
 
-        testResults.push({
-          _id,
-          options: question.options.map((option) => ({
-            _id: option._id,
-            result: option.truth
-              ? ans.includes(option.text)
-              : !ans.includes(option.text),
-          })),
-        });
-      }
+    //     testResults.push({
+    //       _id,
+    //       options: question.options.map((option) => ({
+    //         _id: option._id,
+    //         result: option.truth
+    //           ? ans.includes(option.text)
+    //           : !ans.includes(option.text),
+    //       })),
+    //     });
+    //   }
 
-      results.push({
-        connectionName: collectionName,
-        questions: testResults,
-      });
-    }
+    //   results.push({
+    //     connectionName: collectionName,
+    //     questions: testResults,
+    //   });
+    // }
 
-    await Progress.create({ quiz: results });
+    // await Progress.create({ quiz: results });
 
     res.status(200).json({
-        status: {
-          type: "success",
-          message: "Жауаптар сәтті тексерілді",
-          description: "Нәтижелерді жеке парақшадан көре аласыз",
-        },
-      });
+      status: {
+        type: "success",
+        message: "Жауаптар сәтті тексерілді",
+        description: "Нәтижелерді жеке парақшадан көре аласыз",
+      },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-        status: {
-          type: "error",
-          message: "Тексеру орындалмады",
-          description: "Тесттерді тексеру кезіндегі қате",
-        },
-      });
+      status: {
+        type: "error",
+        message: "Тексеру орындалмады",
+        description: "Тесттерді тексеру кезіндегі қате",
+      },
+    });
   }
 };
 
@@ -148,15 +144,13 @@ export const add = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({
-        status: {
-          type: "error",
-          message: "Сақтау орындалмады",
-          description: "Тесттерді сақтау кезіндегі қате",
-        },
-      });
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Сақтау орындалмады",
+        description: "Тесттерді сақтау кезіндегі қате",
+      },
+    });
   }
 };
 
@@ -167,15 +161,13 @@ export const update = async (req, res) => {
         new: true,
       }))
     )
-      return res
-        .status(404)
-        .json({
-          status: {
-            type: "error",
-            message: "Тест табылмады",
-            description: "Тест табылмады id: " + req.params.id,
-          },
-        });
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Тест табылмады",
+          description: "Тест табылмады id: " + req.params.id,
+        },
+      });
     res.json({
       status: {
         type: "success",
@@ -185,30 +177,26 @@ export const update = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({
-        status: {
-          type: "error",
-          message: "Өңдеу орындалмады",
-          description: "Тестті өңдеу кезіндегі қате",
-        },
-      });
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Өңдеу орындалмады",
+        description: "Тестті өңдеу кезіндегі қате",
+      },
+    });
   }
 };
 
 export const remove = async (req, res) => {
   try {
     if (!(await TestModel.findByIdAndDelete(req.params.id)))
-      return res
-        .status(404)
-        .json({
-          status: {
-            type: "error",
-            message: "Тест табылмады",
-            description: "Тест табылмады id: " + req.params.id,
-          },
-        });
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Тест табылмады",
+          description: "Тест табылмады id: " + req.params.id,
+        },
+      });
     res.json({
       status: {
         type: "success",
@@ -218,14 +206,12 @@ export const remove = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res
-      .status(500)
-      .json({
-        status: {
-          type: "error",
-          message: "Өшіру орындалмады",
-          description: "Тестті өшіру кезіндегі қате",
-        },
-      });
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Өшіру орындалмады",
+        description: "Тестті өшіру кезіндегі қате",
+      },
+    });
   }
 };
