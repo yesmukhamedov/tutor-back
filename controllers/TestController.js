@@ -82,7 +82,7 @@ export const checking = async (req, res) => {
 
         testResults.push({
           _id,
-          options: question.options.map((option) => ({
+          options: question?.options?.map((option) => ({
             _id: option._id,
             result: option.truth
               ? ans.includes(option.text)
