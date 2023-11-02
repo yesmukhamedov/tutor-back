@@ -63,26 +63,11 @@ export const checking = async (req, res) => {
   try {
     const { collectionName, questions } = req.body;
 
-    const tests = await TestModel.find({ collectionName });
-
-    if (tests.length === 0) {
-      return res.status(404).json({
-        status: {
-          type: "error",
-          message: "Қате",
-          description: "Ұсынылған жауаптардағы тест _id қате",
-        },
-      });
-    }
-
     const results = [];
-
-    for (const test of tests) {
-      const testResults = [];
 
       for (const questionData of questions) {
         const { _id, ans } = questionData;
-        const question = test.find((q) => q._id.toString() === _id);
+        const question = TestModel.findOne({_id});
 
         if (!question) {
           return res.status(400).json({
@@ -109,7 +94,6 @@ export const checking = async (req, res) => {
         connectionName: collectionName,
         questions: testResults,
       });
-    }
 
     await Progress.create({ quiz: results });
 
