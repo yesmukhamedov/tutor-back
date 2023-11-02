@@ -82,7 +82,7 @@ export const checking = async (req, res) => {
 
       for (const questionData of questions) {
         const { _id, ans } = questionData;
-        const question = test.questions.find((q) => q._id.toString() === _id);
+        const question = test.find((q) => q._id.toString() === _id);
 
         if (!question) {
           return res.status(400).json({
