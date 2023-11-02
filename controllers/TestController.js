@@ -61,57 +61,57 @@ export const getCollection = async (req, res) => {
 
 export const checking = async (req, res) => {
   try {
-    // const { collectionName, questions } = req.body;
+    const { collectionName, questions } = req.body;
 
-    // const tests = await TestModel.find({ collectionName });
+    const tests = await TestModel.find({ collectionName });
 
-    // if (tests.length === 0) {
-    //   return res.status(404).json({
-    //     status: {
-    //       type: "error",
-    //       message: "Қате",
-    //       description: "Ұсынылған жауаптардағы тест _id қате",
-    //     },
-    //   });
-    // }
+    if (tests.length === 0) {
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Қате",
+          description: "Ұсынылған жауаптардағы тест _id қате",
+        },
+      });
+    }
 
-    // const results = [];
+    const results = [];
 
-    // for (const test of tests) {
-    //   const testResults = [];
+    for (const test of tests) {
+      const testResults = [];
 
-    //   for (const questionData of questions) {
-    //     const { _id, ans } = questionData;
-    //     const question = test.questions.find((q) => q._id.toString() === _id);
+      for (const questionData of questions) {
+        const { _id, ans } = questionData;
+        const question = test.questions.find((q) => q._id.toString() === _id);
 
-    //     if (!question) {
-    //       return res.status(400).json({
-    //         status: {
-    //           type: "error",
-    //           message: "Қате",
-    //           description: "Ұсынылған жауаптардағы сұрақ _id қате",
-    //         },
-    //       });
-    //     }
+        if (!question) {
+          return res.status(400).json({
+            status: {
+              type: "error",
+              message: "Қате",
+              description: "Ұсынылған жауаптардағы сұрақ _id қате",
+            },
+          });
+        }
 
-    //     testResults.push({
-    //       _id,
-    //       options: question.options.map((option) => ({
-    //         _id: option._id,
-    //         result: option.truth
-    //           ? ans.includes(option.text)
-    //           : !ans.includes(option.text),
-    //       })),
-    //     });
-    //   }
+        testResults.push({
+          _id,
+          options: question.options.map((option) => ({
+            _id: option._id,
+            result: option.truth
+              ? ans.includes(option.text)
+              : !ans.includes(option.text),
+          })),
+        });
+      }
 
-    //   results.push({
-    //     connectionName: collectionName,
-    //     questions: testResults,
-    //   });
-    // }
+      results.push({
+        connectionName: collectionName,
+        questions: testResults,
+      });
+    }
 
-    // await Progress.create({ quiz: results });
+    await Progress.create({ quiz: results });
 
     res.status(200).json({
       status: {
