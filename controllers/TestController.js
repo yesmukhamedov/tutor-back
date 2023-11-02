@@ -103,8 +103,8 @@ export const checking = async (req, res) => {
           options: question.options.map((option) => ({
             _id: option._id,
             result: option.truth
-              ? ans.includes(option._id)
-              : !ans.includes(option._id),
+              ? ans.includes(option.text)
+              : !ans.includes(option.text),
           })),
         });
       }
