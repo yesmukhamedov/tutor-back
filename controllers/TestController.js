@@ -68,7 +68,7 @@ export const checking = async (req, res) => {
       for (const questionData of questions) {
         const { _id, ans } = questionData;
         const testResults = [];
-        const question = TestModel.findOne({_id});
+        const question = await TestModel.findById(_id);
 
         if (!question) {
           return res.status(400).json({
