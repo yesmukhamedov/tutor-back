@@ -1,6 +1,9 @@
 import TestModel from "../models/Test.js";
 import Progress from "../models/Progress.js";
 
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 const updateRecords = async () => {
   try {
     // Находим все документы в коллекции
