@@ -4,7 +4,7 @@ import Progress from "../models/Progress.js";
 const updateRecords = async () => {
   try {
     // Находим все документы в коллекции
-    const documents = await YourModel.find();
+    const documents = await TestModel.find();
 
     let updatedCount = 0;
 
