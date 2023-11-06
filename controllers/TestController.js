@@ -63,11 +63,11 @@ export const checking = async (req, res) => {
   try {
     const { collectionName, questions } = req.body;
 
+    const testResults = [];
     const results = [];
 
       for (const questionData of questions) {
         const { _id, ans } = questionData;
-        const testResults = [];
         const question = await TestModel.findById(_id);
 
         if (!question) {
