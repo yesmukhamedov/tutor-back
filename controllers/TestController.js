@@ -1,43 +1,7 @@
 import TestModel from "../models/Test.js";
 import Progress from "../models/Progress.js";
-import mongoose from "mongoose";
-// const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
-
-const updateRecords = async () => {
-  try {
-    // Находим все документы в коллекции
-    const documents = await TestModel.find();
-
-    let updatedCount = 0;
-
-    // Перебираем документы
-    for (const doc of documents) {
-      let hasUpdates = false;
-
-      // Перебираем объекты options внутри документа
-      for (const option of doc.options) {
-        if (option._id === null) {
-          option._id = new ObjectId();
-          hasUpdates = true;
-        }
-      }
-
-      // Если были обновления, сохраняем документ
-      if (hasUpdates) {
-        await doc.save();
-        updatedCount++;
-      }
-    }
-
-    console.log(`Обновлено ${updatedCount} записей`);
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export const getQuiz = async (req, res) => {
-  updateRecords();
   try {
     res.json(
       await TestModel.aggregate([
