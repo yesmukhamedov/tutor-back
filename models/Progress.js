@@ -4,7 +4,7 @@ const ProgressSchema = new mongoose.Schema({
   quiz: {
     type: [
       {
-        connectionName: {
+        collectionName: {
           type: String,
           required: true,
         },

@@ -1,5 +1,6 @@
 import TestModel from "../models/Test.js";
 import Progress from "../models/Progress.js";
+import User from "../models/User.js";
 
 export const getQuiz = async (req, res) => {
   try {
@@ -61,42 +62,67 @@ export const getCollection = async (req, res) => {
 
 export const checking = async (req, res) => {
   try {
-    const { collectionName, questions } = req.body;
+    const { _id, collectionName, questions } = req.body;
 
     const testResults = [];
-    const results = [];
+    for (const questionData of questions) {
+      const { _id, ans } = questionData;
+      const question = await TestModel.findById(_id);
 
-      for (const questionData of questions) {
-        const { _id, ans } = questionData;
-        const question = await TestModel.findById(_id);
-
-        if (!question) {
-          return res.status(400).json({
-            status: {
-              type: "error",
-              message: "Қате",
-              description: "Ұсынылған жауаптардағы сұрақ _id қате",
-            },
-          });
-        }
-
-        testResults.push({
-          _id,
-          options: question?.options?.map((option) => ({
-            _id: option._id,
-            result: option.truth
-              ? ans.includes(option.text)
-              : !ans.includes(option.text),
-          })),
+      if (!question) {
+        return res.status(400).json({
+          status: {
+            type: "error",
+            message: "Қате",
+            description: "Ұсынылған жауаптардағы сұрақ _id қате",
+          },
         });
       }
 
-      results.push({
-        connectionName: collectionName,
-        questions: testResults,
+      testResults.push({
+        _id,
+        options: question?.options?.map((option) => ({
+          _id: option._id,
+          result: option.truth
+            ? ans.includes(option.text)
+            : !ans.includes(option.text),
+        })),
       });
+    }
 
-    await Progress.create({ quiz: results });
+    const student = await User.findById(_id);
+    const progress = await Progress.findById(_id);
+    if (!student) {
+      res.status(404).json({
+        status: {
+          type: "error",
+          message: "Тексеру орындалмады",
+          description: "Ұсынылған student _id бойынша қолданушы табылмады",
+        },
+      });
+    } else if (progress) {
+      await Progress.findByIdAndUpdate(
+        { _id: progress._id },
+        {
+          $push: {
+            quiz: {
+              collectionName: collectionName,
+              questions: testResults,
+            },
+          },
+        }
+      );
+    } else {
+      await Progress.create({
+        _id: _id,
+        quiz: [
+          {
+            collectionName: collectionName,
+            questions: testResults,
+          },
+        ],
+      });
+    }
 
     res.status(200).json({
       status: {
