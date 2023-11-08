@@ -53,6 +53,10 @@ app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz);
 app.post('/quiz/checking', checkAuth, TestController.checking);
 app.get('/collection/:collectionName', checkAuth, TestController.getCollection);
 
+app.get("/result/:collectionName", checkAuth, TestController.fetchResult);
+app.get("/progress/:_id", checkAuth, TestController.fetchProgress);
+app.get("/results/:collectionName", checkAuth, TestController.results);
+
 app.post('/test', checkAuth, checkAuth, TestController.add);
 app.patch('/test/:id', checkAuth, TestController.update);
 app.delete('/test/:id', checkAuth, TestController.remove);

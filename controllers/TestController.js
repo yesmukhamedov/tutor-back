@@ -143,6 +143,154 @@ export const checking = async (req, res) => {
   }
 };
 
+export const fetchResult = async (req, res) => {
+  try {
+    const progress = await Progress.findOne({ _id: req.body._id });
+    if (!progress) {
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Сұрау орындалмады",
+          description: "Ұсынылған _id бойынша студент нәтижелері табылмады",
+        },
+      });
+    }
+
+    const quiz = progress.quiz.find((item) => item.collectionName === req.params.collectionName);
+    if (!quiz) {
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Сұрау орындалмады",
+          description: "Ұсынылған _id бойынша тест нәтижелері табылмады",
+        },
+      });
+    }
+    res.json(quiz);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Сұрау орындалмады",
+        description: "Нәтижелерді сұрау кезіндегі қате",
+      },
+    });
+  }
+};
+
+export const fetchProgress = async (req, res) => {
+  try {
+    const progress = await Progress.findOne({ _id: req.params._id });
+    if (!progress) {
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Сұрау орындалмады",
+          description: "Ұсынылған _id бойынша студент нәтижелері табылмады",
+        },
+      });
+    }
+
+    const totalOptions = progress.quiz.reduce(
+      (acc, item) =>
+        acc +
+        item.questions.reduce(
+          (subAcc, subItem) => subAcc + subItem.options.length,
+          0
+        ),
+      0
+    );
+    const correctAnswers = progress.quiz.reduce((acc, item) => {
+      const correct = item.questions.filter((q) =>
+        q.options.every((o) => o.result)
+      );
+      return acc + correct.length;
+    }, 0);
+    const successPercentage = (correctAnswers / totalOptions) * 100;
+
+    res.json({
+      quiz: progress.quiz,
+      progress: successPercentage,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Сұрау орындалмады",
+        description: "Нәтижелерді сұрау кезіндегі қате",
+      },
+    });
+  }
+};
+
+export const results = async (req, res) => {
+  try {
+    const supervisor = await User.findById(req.body.supervisorId);
+    if (!supervisor) {
+      return res.status(404).json({
+        status: {
+          type: "error",
+          message: "Сұрау орындалмады",
+          description: "Ұсынылған _id бойынша жетекші табылмады",
+        },
+      });
+    }
+
+    const students = await User.find({ supervisor: req.body.supervisorId });
+    const results = [];
+    for (const student of students) {
+      const progress = await Progress.findOne({ _id: student._id });
+      if (progress) {
+        const quiz = progress.quiz.find(
+          (item) => item.collectionName === req.params.collectionName
+        );
+        const totalOptions = progress.quiz.reduce(
+          (acc, item) =>
+            acc +
+            item.questions.reduce(
+              (subAcc, subItem) => subAcc + subItem.options.length,
+              0
+            ),
+          0
+        );
+        const correctAnswers = progress.quiz.reduce(
+          (acc, item) =>
+            acc +
+            item.questions.reduce(
+              (subAcc, subItem) =>
+                subAcc +
+                subItem.options.filter((option) => option.result).length,
+              0
+            ),
+          0
+        );
+
+        const successRate = (correctAnswers / totalOptions) * 100;
+        if (quiz) {
+          results.push({
+            studentId: student._id,
+            result: successRate,
+            answers: quiz,
+          });
+        }
+      }
+    }
+
+    res.json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: {
+        type: "error",
+        message: "Сұрау орындалмады",
+        description: "Нәтижелерді сұрау кезіндегі қате",
+      },
+    });
+  }
+};
+
 export const add = async (req, res) => {
   try {
     await TestModel.create(req.body);
