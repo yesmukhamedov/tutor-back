@@ -147,11 +147,11 @@ export const fetchResult = async (req, res) => {
   try {
     const progress = await Progress.findOne({ _id: req.body._id });
     if (!progress) {
-      return res.status(404).json({
+      return res.status(403).json({
         status: {
-          type: "error",
-          message: "Сұрау орындалмады",
-          description: "Ұсынылған _id бойынша студент нәтижелері табылмады",
+          type: "info",
+          message: "Тестлеу сәтті жүктелді",
+          description: "Сәттілік, сізде 30 минут!!",
         },
       });
     }
