@@ -144,6 +144,7 @@ export const checking = async (req, res) => {
 };
 
 export const fetchResult = async (req, res) => {
+  console.log(req.body._id);
   try {
     const progress = await Progress.findOne({ _id: req.body._id });
     if (!progress) {
@@ -151,7 +152,7 @@ export const fetchResult = async (req, res) => {
         status: {
           type: "info",
           message: "Тестлеу сәтті жүктелді",
-          description: req.body._id//"Сәттілік, сізде 30 минут!!",
+          description: "Сәттілік, сізде 30 минут!!",
         },
       });
     }
