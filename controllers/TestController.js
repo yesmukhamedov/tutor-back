@@ -144,7 +144,7 @@ export const checking = async (req, res) => {
 };
 
 export const fetchResult = async (req, res) => {
-  console.log(req.body._id);
+  console.log(req.body);
   try {
     const progress = await Progress.findOne({ _id: req.body._id });
     if (!progress) {
