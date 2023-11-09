@@ -168,7 +168,7 @@ export const setTheme = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       _id,
       { theme: theme },
-      { new: true }
+      { new: true, select: "-passwordHash -updatedAt -createdAt -__v" }
     );
     if (!updatedUser) {
       return res.status(404).json({
@@ -180,7 +180,11 @@ export const setTheme = async (req, res) => {
       });
     }
 
-    res.json(updatedUser);
+    const { passwordHash, __v, createdAt, updatedAt, ...userData } = updatedUser._doc;
+
+    res.json({
+        user: userData
+    });
   } catch (error) {
     res.status(500).json({
       status: {
