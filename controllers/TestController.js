@@ -144,9 +144,8 @@ export const checking = async (req, res) => {
 };
 
 export const fetchResult = async (req, res) => {
-  console.log(req.body);
   try {
-    const progress = await Progress.findOne({ _id: req.body._id });
+    const progress = await Progress.findOne({ _id: req.params._id });
     if (!progress) {
       return res.status(403).json({
         status: {
@@ -226,9 +225,9 @@ export const fetchProgress = async (req, res) => {
   }
 };
 
-export const results = async (req, res) => {
+export const fetchResults = async (req, res) => {
   try {
-    const supervisor = await User.findById(req.body.supervisorId);
+    const supervisor = await User.findById(req.params.supervisorId);
     if (!supervisor) {
       return res.status(404).json({
         status: {
@@ -239,7 +238,7 @@ export const results = async (req, res) => {
       });
     }
 
-    const students = await User.find({ supervisor: req.body.supervisorId });
+    const students = await User.find({ supervisor: req.params.supervisorId });
     const results = [];
     for (const student of students) {
       const progress = await Progress.findOne({ _id: student._id });
