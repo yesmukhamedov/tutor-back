@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 app.post('/login', validation.login, handleValidationErrors, UserController.login);
 app.post('/register', validation.register, handleValidationErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.getMe);
+app.post('/set-theme', UserController.setTheme);
 
 app.get('/quiz/:collectionName/:count', checkAuth, TestController.getQuiz);
 app.post('/quiz/checking', checkAuth, TestController.checking);
