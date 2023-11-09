@@ -150,8 +150,8 @@ export const fetchResult = async (req, res) => {
       return res.status(403).json({
         status: {
           type: "info",
-          message: "Тестлеу сәтті жүктелді",
-          description: "Сәттілік, сізде 30 минут!!",
+          message: "Бұл сіз үшін алғашқы деңгеі сынау",
+          description: "Барлық жауаптарыңыз бен деректер жазылатынын ескертеміз. Сәттілік!!",
         },
       });
     }
@@ -160,9 +160,9 @@ export const fetchResult = async (req, res) => {
     if (!quiz) {
       return res.status(404).json({
         status: {
-          type: "error",
-          message: "Сұрау орындалмады",
-          description: "Ұсынылған _id бойынша тест нәтижелері табылмады",
+          type: "info",
+          message: "Тестлеу сәтті жүктелді",
+          description: "Сәттілік, сізде 30 минут!!",
         },
       });
     }
