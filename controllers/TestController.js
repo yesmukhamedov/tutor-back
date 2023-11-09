@@ -93,7 +93,7 @@ export const checking = async (req, res) => {
     const student = await User.findById(_id);
     const progress = await Progress.findById(_id);
     if (!student) {
-      res.status(404).json({
+      return res.status(404).json({
         status: {
           type: "error",
           message: "Тексеру орындалмады",
