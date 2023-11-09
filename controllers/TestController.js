@@ -151,7 +151,7 @@ export const fetchResult = async (req, res) => {
         status: {
           type: "info",
           message: "Тестлеу сәтті жүктелді",
-          description: "Сәттілік, сізде 30 минут!!",
+          description: req.body._id//"Сәттілік, сізде 30 минут!!",
         },
       });
     }
