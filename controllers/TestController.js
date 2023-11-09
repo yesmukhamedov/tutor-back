@@ -66,7 +66,7 @@ export const checking = async (req, res) => {
 
     const testResults = [];
     for (const questionData of questions) {
-      const { _id, ans } = questionData;
+      const { _id, answers } = questionData;
       const question = await TestModel.findById(_id);
 
       if (!question) {
@@ -84,8 +84,8 @@ export const checking = async (req, res) => {
         options: question?.options?.map((option) => ({
           _id: option._id,
           result: option.truth
-            ? ans.includes(option.text)
-            : !ans.includes(option.text),
+            ? answers.includes(option.text)
+            : !answers.includes(option.text),
         })),
       });
     }
