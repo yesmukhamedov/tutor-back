@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
     supervisor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    },
+    theme: {
+        type: String,
+        required: false,
     }
 }, {
     timestamps: true,
