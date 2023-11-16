@@ -80,9 +80,9 @@ export const checking = async (req, res) => {
       }
 
       testResults.push({
-        _id,
+        ...question,
         options: question?.options?.map((option) => ({
-          _id: option._id,
+          ...option,
           result: option.truth
             ? answers.includes(option.text)
             : !answers.includes(option.text),
