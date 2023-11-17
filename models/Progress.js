@@ -30,6 +30,10 @@ const ProgressSchema = new mongoose.Schema({
                       type: String,
                       required: true,
                     },
+                    truth: {
+                      type: Boolean,
+                      default: false,
+                    },
                     result: {
                       type: Boolean,
                       default: false,
