@@ -84,6 +84,7 @@ export const checking = async (req, res) => {
         ...question,
         options: question?.options?.map((option) => ({
           ...option,
+          answer: answers.includes(option.text),
           result: option.truth
             ? answers.includes(option.text)
             : !answers.includes(option.text),
