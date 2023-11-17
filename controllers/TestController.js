@@ -113,6 +113,7 @@ export const checking = async (req, res) => {
         }
       );
     } else {
+      console.log(id, collectionName, testResults)
       await Progress.create({
         _id: id,
         quiz: [
