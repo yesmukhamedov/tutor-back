@@ -15,10 +15,18 @@ const ProgressSchema = new mongoose.Schema({
                 type: String,
                 required: true,
               },
+              text: {
+                type: String,
+                required: true,
+              },
               options: {
                 type: [
                   {
                     _id: {
+                      type: String,
+                      required: true,
+                    },
+                    text: {
                       type: String,
                       required: true,
                     },
