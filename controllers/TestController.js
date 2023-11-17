@@ -63,9 +63,9 @@ export const getCollection = async (req, res) => {
 export const checking = async (req, res) => {
   try {
     const { id, collectionName, questions } = req.body;
-    console.log("66=>", id, collectionName, testResults);
 
     const testResults = [];
+    console.log("66=>", id, collectionName, testResults);
     for (const questionData of questions) {
       const { _id, answers } = questionData;
       const question = await TestModel.findById(_id);
