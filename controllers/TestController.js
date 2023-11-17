@@ -2,10 +2,14 @@ import TestModel from "../models/Test.js";
 import Progress from "../models/Progress.js";
 import User from "../models/User.js";
 
+import mongoose from "mongoose";
+// const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 const updateRecords = async () => {
   try {
     // Находим все документы в коллекции
-    const documents = await YourModel.find();
+    const documents = await TestModel.find();
 
     let updatedCount = 0;
 
