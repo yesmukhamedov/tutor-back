@@ -62,7 +62,7 @@ export const getCollection = async (req, res) => {
 
 export const checking = async (req, res) => {
   try {
-    const { _id, collectionName, questions } = req.body;
+    const { id, collectionName, questions } = req.body;
 
     const testResults = [];
     for (const questionData of questions) {
@@ -90,8 +90,8 @@ export const checking = async (req, res) => {
       });
     }
 
-    const student = await User.findById(_id);
-    const progress = await Progress.findById(_id);
+    const student = await User.findById(id);
+    const progress = await Progress.findById(id);
     if (!student) {
       return res.status(404).json({
         status: {
@@ -114,7 +114,7 @@ export const checking = async (req, res) => {
       );
     } else {
       await Progress.create({
-        _id: _id,
+        _id: id,
         quiz: [
           {
             collectionName: collectionName,
