@@ -63,6 +63,7 @@ export const getCollection = async (req, res) => {
 export const checking = async (req, res) => {
   try {
     const { id, collectionName, questions } = req.body;
+    console.log("66=>", id, collectionName, testResults);
 
     const testResults = [];
     for (const questionData of questions) {
@@ -101,6 +102,7 @@ export const checking = async (req, res) => {
         },
       });
     } else if (progress) {
+      console.log("105=>", id, collectionName, testResults);
       await Progress.findByIdAndUpdate(
         { _id: progress._id },
         {
@@ -113,7 +115,7 @@ export const checking = async (req, res) => {
         }
       );
     } else {
-      console.log(id, collectionName, testResults)
+      console.log("118=>", id, collectionName, testResults);
       await Progress.create({
         _id: id,
         quiz: [
